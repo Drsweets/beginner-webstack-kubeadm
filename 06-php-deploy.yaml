@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php
+  namespace: webstack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php
+  template:
+    metadata:
+      labels:
+        app: php
+    spec:
+      containers:
+      - name: php
+        image: php:fpm-alpine
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+        - name: webroot
+          mountPath: /var/www/html
+      volumes:
+      - name: webroot
+        emptyDir: {}

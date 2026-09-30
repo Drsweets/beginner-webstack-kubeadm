@@ -1,0 +1,28 @@
+# OPTIONAL. Only needed if you want Services of type LoadBalancer to get
+# real IPs on your LAN. This webstack doesn't require it, since Traefik
+# is already exposed via hostPort 80/443 on every node.
+#
+# This file only defines the address pool - MetalLB itself (CRDs +
+# controller + speaker) must already be installed, which `make
+# prereq-cp` does for you from the official manifest.
+#
+# >>> REQUIRED EDIT <<< Change the address range below to match YOUR LAN subnet
+# before applying (must be L2-reachable from all nodes, outside the DHCP pool).
+# The shipped 192.168.1.200-192.168.1.210 is a PLACEHOLDER, not a default.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.1.200-192.168.1.210
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - default

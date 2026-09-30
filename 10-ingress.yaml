@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webstack-ingress
+  namespace: webstack
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: webstack.homelab.local   # <-- change if you want a different DNS name;
+                                   #     clients must resolve it to any node IP
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx
+            port:
+              number: 80
